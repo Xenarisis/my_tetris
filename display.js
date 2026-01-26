@@ -19,9 +19,8 @@ class Tetromino{
             J: "blue",
             L: "orange"
         }
-        
 
-        this.pieceSelector()
+        // this.pieceSelector()
     }
     
     pieceSelector() {
@@ -56,28 +55,32 @@ class Grid{
         this.fillGrid()
         
         this.draw()
+
     }
     
     fillGrid() {
-        this.theGrid = Array(this.Rows).fill(null).map(() => Array(this.Columns).fill(null))
+        this.theGrid = Array(this.Rows).fill(0).map(() => Array(this.Columns).fill(0))
     }
-    
-    
-    
-    draw() {
+
+    draw(piece/*, piece2*/) {
         this.Context.fillStyle = "#000"
         this.Context.strokeStyle = "#be0af0"
-        
         this.drawgrid()
-        let piece = IsTetromino.pieceSelector()
-        this.drawpiece(piece)
+        if(piece) {
+            this.drawpiece(piece)
+        }
+        // if(piece2) {
+        //     this.drawnextpiece(piece2)
+        // }
     }
     
     drawgrid() {
         for(let y = 0; y < this.wantedRows; y++) {
             for(let x = 0; x < this.Columns; x++) {
-                this.Context.fillRect(x * this.blockSizex, y * this.blockSizey, this.blockSizex, this.blockSizey)
-                this.Context.strokeRect(x * this.blockSizex, y * this.blockSizey, this.blockSizex, this.blockSizey)
+                if(this.theGrid[y][x] == 0) {
+                    this.Context.fillRect(x * this.blockSizex, y * this.blockSizey, this.blockSizex, this.blockSizey)
+                    this.Context.strokeRect(x * this.blockSizex, y * this.blockSizey, this.blockSizex, this.blockSizey)
+                }
             }
         }
     }
@@ -86,12 +89,38 @@ class Grid{
         this.Context.fillStyle = piece.color
 
         for(let y = 0; y < piece.shape.length; y++) {
-            for(let x = 0; x < this.Columns; x++) {
-                if(piece.shape[y][x]) {
-                    this.Context.fillRect(x * this.blockSizex, y * this.blockSizey, this.blockSizex, this.blockSizey)
+            for(let x = 0; x < piece.shape[y].length; x++) {
+                if(piece.shape[y][x] == 1) {
+                    this.theGrid[piece.y + y][piece.x + x] = piece.color
+                    this.Context.fillRect((piece.x + x) * this.blockSizex, (piece.y + y) * this.blockSizey, this.blockSizex, this.blockSizey)
                 }
             }
         }
+    }
+
+    // drawnextpiece(piece) {
+    //     this.Context.fillStyle = piece.color
+
+    //     for(let y = 0; y < piece.shape.length; y++) {
+    //         for(let x = 0; x < piece.shape[y].length; x++) {
+    //             if(piece.shape[y][x]) {
+    //                 this.Context.fillRect((x + 12) * this.blockSizex, (y + 1) * this.blockSizey, this.blockSizex, this.blockSizey)
+    //             }
+    //         }
+    //     }
+    // }
+
+    removeTetrominos(piece) {
+        this.Context.fillStyle = "#000"
+        for(let y = 0; y < piece.shape.length; y++) {
+            for(let x = 0; x < piece.shape[y].length; x++) {
+                if(piece.shape[y][x] == 1) {
+                    this.theGrid[piece.y + y][piece.x + x] = 0
+                    this.Context.fillRect((piece.x + x) * this.blockSizex, (piece.y + y) * this.blockSizey, this.blockSizex, this.blockSizey)
+                }
+            }
+        }
+        this.drawgrid()
     }
     
 }
@@ -100,4 +129,4 @@ const IsGrid = new Grid()
 export {
     IsTetromino,
     IsGrid
-}
+};
