@@ -1,11 +1,11 @@
 class Tetromino{
     constructor() {
         this.Shape={
-            I: [[1, 1, 1, 1]],
+            I: [[1, 1, 1, 1], [0,0,0,0], [0,0,0,0], [0,0,0,0]],
             O: [[1, 1], [1, 1]],
-            T: [[0, 1, 0], [1, 1, 1]],
-            S: [[0, 1, 1], [1, 1, 0]],
-            Z: [[1, 1, 0], [0, 1, 1]],
+            T: [[0, 1, 0], [1, 1, 1], [0,0,0]],
+            S: [[0, 1, 1], [1, 1, 0], [0,0,0]],
+            Z: [[1, 1, 0], [0, 1, 1], [0,0,0]],
             J: [[0, 0, 1], [0, 0, 1], [0, 1, 1]],
             L: [[1, 0, 0], [1, 0, 0], [1, 1, 0]]
         }
@@ -90,7 +90,7 @@ class Grid{
 
         for(let y = 0; y < piece.shape.length; y++) {
             for(let x = 0; x < piece.shape[y].length; x++) {
-                if(piece.shape[y][x] == 1) {
+                if(piece.shape[y][x] != 0) {
                     this.theGrid[piece.y + y][piece.x + x] = piece.color
                     this.Context.fillRect((piece.x + x) * this.blockSizex, (piece.y + y) * this.blockSizey, this.blockSizex, this.blockSizey)
                 }
@@ -114,13 +114,23 @@ class Grid{
         this.Context.fillStyle = "#000"
         for(let y = 0; y < piece.shape.length; y++) {
             for(let x = 0; x < piece.shape[y].length; x++) {
-                if(piece.shape[y][x] == 1) {
+                if(piece.shape[y][x] != 0) {
                     this.theGrid[piece.y + y][piece.x + x] = 0
                     this.Context.fillRect((piece.x + x) * this.blockSizex, (piece.y + y) * this.blockSizey, this.blockSizex, this.blockSizey)
                 }
             }
         }
         this.drawgrid()
+    }
+
+    replacementOfGrid(linesY) {
+        for(let y = linesY; y > 0; y--) {
+            for(let x = 0; x < this.Columns; x++) {
+                this.theGrid[y][x] = this.theGrid[y - 1][x]
+                this.Context.fillStyle = this.theGrid[y - 1][x]
+                this.Context.fillRect(x * this.blockSizex, y * this.blockSizey, this.blockSizex, this.blockSizey)
+            }
+        }
     }
     
 }
