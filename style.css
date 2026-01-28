@@ -62,16 +62,19 @@ body {
 
 #tetris_canva {
     grid-column: 1;
-    background: rgba(0, 0, 0, 0.5);
-    border: 2px solid #be0af0;
-    border-radius: 5px;
+    /* background: rgba(0, 0, 0, 0.5);  */
+    border: 2px solid #be0af0; 
     height : 100%;
     width : 100%;
 }
 
+.right_blocs {
+    display: flex;
+}
+
 #title {
     grid-column: 2;
-    grid-row: 1;
+    grid-row: auto;
     background: rgba(255, 255, 255, 0.1);
     border: 2px solid #be0af0;
     border-radius: 10px;
@@ -82,23 +85,29 @@ body {
 
     color: white;
     margin: 0;
-    font-size: 2em;
+    font-size: 4vw;
     text-shadow: 0 0 10px #be0af0;
 }
 
 #next_blocs {
     grid-column: 2;
-    grid-row: 2;
+    grid-row: auto;
     background: rgba(255, 0, 0, 0.2);
     border: 2px solid #be0af0;
     border-radius: 10px;
     padding: 10px;
-    min-height: 150px;
+    min-height: 100px;
+    justify-content: center;
+}
+
+#txt_NB {
+    text-align: center;
+    color: white;
 }
 
 #informations {
     grid-column: 2;
-    grid-row: 3;
+    grid-row: auto;
     background: rgba(0, 255, 0, 0.2);
     border: 2px solid #be0af0;
     border-radius: 10px;
@@ -112,16 +121,16 @@ body {
 }
 
 .informations_text {
-    grid-row: 1;
+    grid-row: auto;
     color: white;
     margin: 0;
-    font-size: 2em;
+    font-size: 3vw;
     text-shadow: 0 0 10px #be0af0;
 }
 
 #start {
     grid-column: 2;
-    grid-row: 4;
+    grid-row: auto;
     background: rgba(0, 255, 255, 0.2);
     border: 2px solid #be0af0;
     border-radius: 10px;
