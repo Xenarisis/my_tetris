@@ -60,7 +60,6 @@ class Game{
         }
 
         this.IsLinesComplete()
-        this.pieceLock = false
         display.IsGrid.draw(this.Tetromino)
         requestAnimationFrame(() => this.update())
     }  
@@ -100,6 +99,8 @@ class Game{
 
     checkCollision() {
         // Logic to check for collisions
+        
+
         this.collision = () => {
             for(let y = 0; y < this.Tetromino.shape.length; y++) {
                 for(let x = 0; x < this.Tetromino.shape[y].length; x++) {
@@ -107,7 +108,7 @@ class Game{
                         // Check for bottom collision
                         if(this.Tetromino.y + y + 1 >= display.IsGrid.wantedRows || display.IsGrid.theGrid[this.Tetromino.y + y + 1][this.Tetromino.x + x] !== 0) {
                             return true
-                        }
+                        } 
                     }
                 }
             }
@@ -152,23 +153,14 @@ class Game{
 
         this.Tetromino.x += 1
 
-        this.exeptionright = () => {
-            let isExeption = 0
-            for(let y = 0; y < this.Tetromino.shape.length; y++) {
-                if(this.Tetromino.shape[y][this.Tetromino.shape.length - 1] == 0) {
-                    isExeption++
-                }
-            }
-            if(isExeption == this.Tetromino.shape.length && this.Tetromino.x + this.Tetromino.shape[0].length > display.IsGrid.Columns) {
+        Rows = display.IsGrid.takeRightRows(this.Tetromino)
+        
+        if(this.Tetromino.x + this.Tetromino.shape.length < display.IsGrid.Columns) {
+            while(this.Tetromino.x + Rows.rightY < display.IsGrid.Columns) {
                 this.Tetromino.x += 1
-                isExeption = 0
-            } else if(this.Tetromino.x + this.Tetromino.shape[0].length > display.IsGrid.Columns) {
-                this.Tetromino.x = display.IsGrid.Columns - this.Tetromino.shape[0].length
             }
-
         }
 
-        this.exeptionright()
     }
 
     moveLeft() {
@@ -177,20 +169,14 @@ class Game{
 
         this.Tetromino.x -= 1
 
-        this.exeptionleft = () => {
-            let isExeption = 0
-            for(let y = 0; y < this.Tetromino.shape.length; y++) {
-                if(this.Tetromino.shape[y][0] == 0) {
-                    isExeption++
-                }
-            }
-            if(isExeption == this.Tetromino.shape.length && this.Tetromino.x < 0 ) {
+        Rows = display.IsGrid.takeRightRows(this.Tetromino)
+
+        if(this.Tetromino.x < 0) {
+            while(this.Tetromino.x + Rows.leftY<= 0) {
                 this.Tetromino.x -= 1
-                isExeption = 0
-            } else if(this.Tetromino.x < 0) this.Tetromino.x = 0
+            }
         }
 
-        this.exeptionleft()
     }
 
     clockWiseRotate() {
@@ -214,8 +200,8 @@ class Game{
 
         this.Tetromino.shape = rotatedShape
 
-        this.exeptionright()
-        this.exeptionleft()
+        // this.exeptionright()
+        // this.exeptionleft()
     }
 
     counterClockWiseRotate() {
@@ -239,8 +225,8 @@ class Game{
 
         this.Tetromino.shape = rotatedShape
 
-        this.exeptionright()
-        this.exeptionleft()
+        // this.exeptionright()
+        // this.exeptionleft()
     }
 }
 
