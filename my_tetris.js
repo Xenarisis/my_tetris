@@ -190,12 +190,10 @@ class Game{
                     let gridY = this.Tetromino.y + y
                     let gridX = this.Tetromino.x + x
                     
-                    // Vérifier si on est dans les limites
                     if(gridX < 0 || gridX >= display.IsGrid.Columns) {
                         return true
                     }
                     
-                    // Vérifier collision avec pièces déjà placées
                     if(gridY >= 0 && gridY < display.IsGrid.wantedRows && 
                        display.IsGrid.theGrid[gridY][gridX] !== 0) {
                         return true
