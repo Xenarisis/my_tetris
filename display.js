@@ -63,16 +63,16 @@ class Grid{
         this.theGrid = Array(this.Rows).fill(0).map(() => Array(this.Columns).fill(0))
     }
 
-    draw(piece/*, piece2*/) {
+    draw(piece, piece2) {
         this.Context.fillStyle = "#000"
         this.Context.strokeStyle = "#be0af0"
         this.drawgrid()
         if(piece) {
             this.drawpiece(piece)
         }
-        // if(piece2) {
-        //     this.drawnextpiece(piece2)
-        // }
+        if(piece2) {
+            this.drawnextpiece(piece2)
+        }
     }
     
     drawgrid() {
@@ -99,17 +99,29 @@ class Grid{
         }
     }
 
-    // drawnextpiece(piece) {
-    //     this.Context.fillStyle = piece.color
+    drawnextpiece(piece) {
+        this.tetrisNextT = document.getElementById("next_blocs")
+        this.tetrisNextT.innerHTML = "<h3 style='color: white; text-align: center;'>Next Piece</h3>"
 
-    //     for(let y = 0; y < piece.shape.length; y++) {
-    //         for(let x = 0; x < piece.shape[y].length; x++) {
-    //             if(piece.shape[y][x]) {
-    //                 this.Context.fillRect((x + 12) * this.blockSizex, (y + 1) * this.blockSizey, this.blockSizex, this.blockSizey)
-    //             }
-    //         }
-    //     }
-    // }
+        this.nextTCanvas = document.createElement("canvas")
+        this.nextTCanvas.width = 4 * this.blockSizex
+        this.nextTCanvas.height = 4 * this.blockSizey
+        this.nextTContext = this.nextTCanvas.getContext("2d")
+
+        this.nextTContext.fillStyle = "rgba(0, 0, 0, 0.4)"
+        this.nextTContext.fillRect(0, 0, this.nextTCanvas.width, this.nextTCanvas.height)
+
+        this.nextTContext.fillStyle = piece.color
+
+        for(let y = 0; y < piece.shape.length; y++) {
+            for(let x = 0; x< piece.shape[0].length; x++) {
+                if(piece.shape[y][x]) {
+                    this.nextTContext.fillRect(x * this.blockSizex, y * this.blockSizey, this.blockSizex, this.blockSizey)
+                }
+            }
+        }
+
+    }
 
     removeTetrominos(piece) {
         this.Context.fillStyle = "#000"
