@@ -135,6 +135,7 @@ class Game{
         this.Tetromino.y += 1
         this.checkCollision()
     }
+
     hardDrop() {
         // Logic to move tetromino down
         display.IsGrid.removeTetrominos(this.Tetromino)
@@ -151,27 +152,23 @@ class Game{
 
         this.Tetromino.x += 1
 
-        if(this.Tetromino.x + this.Tetromino.shape[0].length > display.IsGrid.Columns) {
-            this.Tetromino.x = display.IsGrid.Columns - this.Tetromino.shape[0].length
-        }
-
         this.exeptionright = () => {
             let isExeption = 0
             for(let y = 0; y < this.Tetromino.shape.length; y++) {
-                if(this.Tetromino.shape[y][this.Tetromino.shape.length -1] == 0) {
+                if(this.Tetromino.shape[y][this.Tetromino.shape.length - 1] == 0) {
                     isExeption++
                 }
             }
-            if(isExeption == this.Tetromino.shape.length) {
+            if(isExeption == this.Tetromino.shape.length && this.Tetromino.x + this.Tetromino.shape[0].length > display.IsGrid.Columns) {
                 this.Tetromino.x += 1
-                isExeption = O
+                isExeption = 0
+            } else if(this.Tetromino.x + this.Tetromino.shape[0].length > display.IsGrid.Columns) {
+                this.Tetromino.x = display.IsGrid.Columns - this.Tetromino.shape[0].length
             }
 
-            return false
         }
 
         this.exeptionright()
-        this.checkCollision() 
     }
 
     moveLeft() {
@@ -179,7 +176,6 @@ class Game{
         display.IsGrid.removeTetrominos(this.Tetromino)
 
         this.Tetromino.x -= 1
-        if(this.Tetromino.x < 0) this.Tetromino.x = 0
 
         this.exeptionleft = () => {
             let isExeption = 0
@@ -188,14 +184,13 @@ class Game{
                     isExeption++
                 }
             }
-            if(isExeption == this.Tetromino.shape.length) {
+            if(isExeption == this.Tetromino.shape.length && this.Tetromino.x < 0 ) {
                 this.Tetromino.x -= 1
-                isExeption = O
-            }
+                isExeption = 0
+            } else if(this.Tetromino.x < 0) this.Tetromino.x = 0
         }
 
         this.exeptionleft()
-        this.checkCollision()
     }
 
     clockWiseRotate() {
@@ -219,6 +214,8 @@ class Game{
 
         this.Tetromino.shape = rotatedShape
 
+        this.exeptionright()
+        this.exeptionleft()
     }
 
     counterClockWiseRotate() {
@@ -242,6 +239,8 @@ class Game{
 
         this.Tetromino.shape = rotatedShape
 
+        this.exeptionright()
+        this.exeptionleft()
     }
 }
 
