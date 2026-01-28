@@ -101,14 +101,14 @@ class Grid{
 
     drawnextpiece(piece) {
         this.tetrisNextT = document.getElementById("next_blocs")
-        this.tetrisNextT.innerHTML = "<h3 style='color: white; text-align: center;'>Next Piece</h3>"
+
 
         this.nextTCanvas = document.createElement("canvas")
         this.nextTCanvas.width = 4 * this.blockSizex
         this.nextTCanvas.height = 4 * this.blockSizey
         this.nextTContext = this.nextTCanvas.getContext("2d")
 
-        this.nextTContext.fillStyle = "rgba(0, 0, 0, 0.4)"
+        this.nextTContext.fillStyle = "rgba(0, 0, 0, 0.5)"
         this.nextTContext.fillRect(0, 0, this.nextTCanvas.width, this.nextTCanvas.height)
 
         this.nextTContext.fillStyle = piece.color
