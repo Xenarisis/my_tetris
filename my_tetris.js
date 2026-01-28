@@ -11,11 +11,15 @@ class Game{
         this.deltaTime = 0
 
         this.Tetromino = null
+        this.holdTetromino = null
+        this.nextTetromino = null
+
         this.gameOver = false
         this._gameRunning = false
         this.gameLoop = null
         this.collision = false
         this.pieceLock = false
+        this.canHold = false
 
         this.newY = display.IsGrid.wantedRows
 
@@ -41,6 +45,7 @@ class Game{
         
         this._gameRunning = true
         this.Tetromino = display.IsTetromino.pieceSelector()
+        this.nextTetromino = display.IsTetromino.pieceSelector()
     
         this.reset_grid()
 
@@ -60,7 +65,7 @@ class Game{
         }
 
         this.IsLinesComplete()
-        display.IsGrid.draw(this.Tetromino)
+        display.IsGrid.draw(this.Tetromino, this.nextTetromino)
         requestAnimationFrame(() => this.update())
     }  
 
@@ -123,7 +128,8 @@ class Game{
             } else {
                 this.lockPiece()
                 
-                this.Tetromino = display.IsTetromino.pieceSelector()
+                this.Tetromino = this.nextTetromino
+                this.nextTetromino = display.IsTetromino.pieceSelector()
                 requestAnimationFrame(() => this.update())
             }
         }
