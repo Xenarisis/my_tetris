@@ -1,6 +1,6 @@
 class Tetromino{
     constructor() {
-        this.Shape={
+        this.shape={
             I: [[1, 1, 1, 1], [0,0,0,0], [0,0,0,0], [0,0,0,0]],
             O: [[1, 1], [1, 1]],
             T: [[0, 1, 0], [1, 1, 1], [0,0,0]],
@@ -24,15 +24,16 @@ class Tetromino{
     }
     
     pieceSelector() {
-        this.pieces = Object.keys(this.Shape);
+        this.pieces = Object.keys(this.shape);
         this.randomPiece = this.pieces[Math.floor(Math.random() * this.pieces.length)];
         
         return {
-            shape: this.Shape[this.randomPiece],
+            shape: this.shape[this.randomPiece],
             type: this.randomPiece,
-            x: Math.floor(10 / 2) - Math.floor(this.Shape[this.randomPiece][0].length / 2),
+            x: Math.floor(10 / 2) - Math.floor(this.shape[this.randomPiece][0].length / 2),
             y: 0,
             color: this.Color[this.randomPiece]
+
         };
     }
 }
@@ -132,7 +133,39 @@ class Grid{
             }
         }
     }
-    
+
+    takeRightRows(piece) {
+        let Rows = {
+            leftY: 0,
+            rightY: 0
+        }
+
+        let IsEmpty = 0
+
+        let IsLeft = true
+        let IsRight = false
+
+        for(let x = 0; x < piece.shape.length; x++) {
+            for (let y = 0; y < piece.shape.length; y++) {
+                if(piece.shape[y][x] == 0) {
+                    IsEmpty++
+                } else {
+                    IsLeft = false
+                    IsRight = true
+                }
+            }
+            if(IsEmpty == piece.shape.length && IsLeft == true) {
+                Rows.leftY++
+            }
+            if(IsEmpty == piece.shape.length && IsRight == true) {
+                Rows.rightY++
+            }
+
+            IsEmpty = 0
+        }
+
+        return Rows
+    }
 }
 const IsGrid = new Grid()
 
