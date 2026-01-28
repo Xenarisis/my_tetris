@@ -2,19 +2,24 @@ import * as Game from "./my_tetris.js"
 
 document.addEventListener('keydown', (event) => {
     switch(event.key) {
-        case 'ArrowLeft', 'q':
+        case 'ArrowLeft':
+        case 'q':
             Game.IsGame.moveLeft()
             break
-        case 'ArrowRight', 'd':
+        case 'ArrowRight':
+        case 'd':
             Game.IsGame.moveRight()
             break
-        case 'ArrowDown', 's':
+        case 'ArrowDown':
+        case 's':
             Game.IsGame.softDrop()
             break
-        case 'ArrowUp', 'x':
+        case 'ArrowUp':
+        case 'x':
             Game.IsGame.clockWiseRotate()
             break
-        case 'Ctrl', 'z':
+        case 'Control':
+        case 'z':
             Game.IsGame.counterClockWiseRotate()
             break
         case ' ':
