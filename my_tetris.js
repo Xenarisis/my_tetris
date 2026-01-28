@@ -148,85 +148,121 @@ class Game{
     }
 
     moveRight() {
-        // Logic to move tetromino right
+        // Logic to move tetromino to the right
         display.IsGrid.removeTetrominos(this.Tetromino)
-
-        this.Tetromino.x += 1
-
-        Rows = display.IsGrid.takeRightRows(this.Tetromino)
         
-        if(this.Tetromino.x + this.Tetromino.shape.length < display.IsGrid.Columns) {
-            while(this.Tetromino.x + Rows.rightY < display.IsGrid.Columns) {
-                this.Tetromino.x += 1
-            }
+        this.Tetromino.x += 1
+        
+        let Rows = display.IsGrid.takeRightRows(this.Tetromino)
+        
+        if(this.Tetromino.x + this.Tetromino.shape[0].length - Rows.rightY > display.IsGrid.Columns) {
+            this.Tetromino.x = display.IsGrid.Columns - (this.Tetromino.shape[0].length - Rows.rightY)
         }
+        
 
+        if(this.checkSideCollision()) {
+            this.Tetromino.x -= 1 
+        }
     }
 
     moveLeft() {
-        // Logic to move tetromino left
+        // Logic to move tetromino to the left
         display.IsGrid.removeTetrominos(this.Tetromino)
-
+        
         this.Tetromino.x -= 1
-
-        Rows = display.IsGrid.takeRightRows(this.Tetromino)
-
-        if(this.Tetromino.x < 0) {
-            while(this.Tetromino.x + Rows.leftY<= 0) {
-                this.Tetromino.x -= 1
+        
+        let Rows = display.IsGrid.takeRightRows(this.Tetromino)
+        
+        if(this.Tetromino.x + Rows.leftY < 0) {
+            this.Tetromino.x = -Rows.leftY
+        }
+        
+        if(this.checkSideCollision()) {
+            this.Tetromino.x += 1 
+        }
+    }
+    
+    checkSideCollision() {
+        // Logic to check collateral collision
+        for(let y = 0; y < this.Tetromino.shape.length; y++) {
+            for(let x = 0; x < this.Tetromino.shape[y].length; x++) {
+                if(this.Tetromino.shape[y][x]) {
+                    let gridY = this.Tetromino.y + y
+                    let gridX = this.Tetromino.x + x
+                    
+                    // Vérifier si on est dans les limites
+                    if(gridX < 0 || gridX >= display.IsGrid.Columns) {
+                        return true
+                    }
+                    
+                    // Vérifier collision avec pièces déjà placées
+                    if(gridY >= 0 && gridY < display.IsGrid.wantedRows && 
+                       display.IsGrid.theGrid[gridY][gridX] !== 0) {
+                        return true
+                    }
+                }
             }
         }
-
+        return false
     }
-
+    
     clockWiseRotate() {
-        // Logic to rotate tetromino
+        // Logic to rotate the tetromino clockWise
         display.IsGrid.removeTetrominos(this.Tetromino)
-
+        
+        let oldShape = this.Tetromino.shape
         let lengthOfShape = this.Tetromino.shape[0].length
-        let rotatedShape = Array(lengthOfShape).fill(0).map(() => Array(lengthOfShape).fill(0)) 
-        // console.log("Rotate Clockwise")
-        // console.log(this.Tetromino.shape)
-        // console.log(rotatedShape)
-
-        for(let y = 0; y< lengthOfShape; y++) {
+        let rotatedShape = Array(lengthOfShape).fill(0).map(() => Array(lengthOfShape).fill(0))
+        
+        for(let y = 0; y < lengthOfShape; y++) {
             for(let x = 0; x < lengthOfShape; x++) {
-                // console.log(rotatedShape)
                 if(this.Tetromino.shape[y][x] == 1) {
                     rotatedShape[x][lengthOfShape - 1 - y] = this.Tetromino.shape[y][x]
                 }
             }
         }
-
+        
         this.Tetromino.shape = rotatedShape
-
-        // this.exeptionright()
-        // this.exeptionleft()
+        
+        this.adjustAfterRotation(oldShape)
     }
-
+    
     counterClockWiseRotate() {
-        // Logic to rotate tetromino
+        // Logic to rotate the tetromino counterclockWise
         display.IsGrid.removeTetrominos(this.Tetromino)
-
+        
+        let oldShape = this.Tetromino.shape
         let lengthOfShape = this.Tetromino.shape[0].length
         let rotatedShape = Array(lengthOfShape).fill(0).map(() => Array(lengthOfShape).fill(0))
-        // console.log("Rotate Counter-Clockwise") 
-        // console.log(this.Tetromino.shape)
-        // console.log(rotatedShape)
-
-        for(let y = 0; y< lengthOfShape; y++) {
+        
+        for(let y = 0; y < lengthOfShape; y++) {
             for(let x = 0; x < lengthOfShape; x++) {
-                // console.log(rotatedShape)
                 if(this.Tetromino.shape[y][x] == 1) {
-                rotatedShape[lengthOfShape - 1 - x][y] = this.Tetromino.shape[y][x]
+                    rotatedShape[lengthOfShape - 1 - x][y] = this.Tetromino.shape[y][x]
                 }
             }
         }
-
+        
         this.Tetromino.shape = rotatedShape
-
-        // this.exeptionright()
-        // this.exeptionleft()
+        
+        this.adjustAfterRotation(oldShape)
+    }
+    
+    adjustAfterRotation(oldShape) {
+        // Logic to adjust tetromino in function of the old one
+        let Rows = display.IsGrid.takeRightRows(this.Tetromino)
+        
+        if(this.Tetromino.x + this.Tetromino.shape[0].length - Rows.rightY > display.IsGrid.Columns) {
+            this.Tetromino.x = display.IsGrid.Columns - (this.Tetromino.shape[0].length - Rows.rightY)
+        }
+        
+        if(this.Tetromino.x + Rows.leftY < 0) {
+            this.Tetromino.x = -Rows.leftY
+        }
+        
+        if(this.checkSideCollision() || this.collision()) {
+            this.Tetromino.shape = oldShape
+        }
     }
 }
 
